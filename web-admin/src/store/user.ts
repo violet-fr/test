@@ -1,3 +1,10 @@
+/**
+ * 用户状态管理（Pinia）
+ *
+ * 存储登录态：Token、用户信息、菜单树。
+ * Token 同时持久化到 localStorage，页面刷新后从 localStorage 恢复，
+ * 再通过 fetchUserInfo 拉取最新用户信息（避免 Token 被篡改后的权限残留）。
+ */
 import { defineStore } from 'pinia'
 import { login as apiLogin, getUserInfo, getMenuTree, type MenuItem, type LoginResult } from '@/api/auth'
 

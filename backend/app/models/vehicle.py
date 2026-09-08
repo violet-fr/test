@@ -1,6 +1,9 @@
-"""车辆档案 + 车位 + 进出记录 + 月卡"""
-from sqlalchemy import Column, String, Integer, Boolean, DateTime, ForeignKey, Text
-from sqlalchemy.orm import relationship
+"""车辆管理四表：车辆档案、车位、进出记录、月卡白名单
+
+一期停车不收费，月卡仅用于白名单放行判断。
+二期预留停车计费支付能力。
+"""
+from sqlalchemy import Column, String, Integer, Boolean, DateTime, ForeignKey
 
 from app.models.base import BaseModel
 

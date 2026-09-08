@@ -42,12 +42,17 @@ def login(req: LoginRequest, db: Session = Depends(get_db)):
 
 @router.post("/register")
 def register(req: RegisterRequest, db: Session = Depends(get_db)):
-    """用户注册（员工/访客角色）"""
+    """用户注册（员工/访客角色）
+
+    安全设计：
+    - 角色白名单：仅允许注册 employee / visitor，admin 角色只能由后台管理员分配
+    - 注册成功后直接返回 Token，前端自动登录，减少二次操作
+    """
     # 用户名唯一性校验
     if db.query(User).filter(User.username == req.username).first():
         raise BizException(12002, "用户名已存在")
 
-    # 角色白名单：仅允许注册 employee / visitor，admin 由后台分配
+    # 角色白名单校验，防止越权注册管理员
     if req.role_code not in ("employee", "visitor"):
         raise BizException(10001, "非法的注册角色")
 
@@ -68,6 +73,7 @@ def register(req: RegisterRequest, db: Session = Depends(get_db)):
     db.commit()
     db.refresh(user)
 
+    # 注册即登录，返回双 Token
     access_token = create_access_token(str(user.id))
     refresh_token = create_refresh_token(str(user.id))
 

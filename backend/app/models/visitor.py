@@ -1,11 +1,22 @@
-"""访客邀请 + 访客预约 + 到访记录"""
-from sqlalchemy import Column, String, Integer, DateTime, ForeignKey, Text
+"""访客管理三表：邀请 -> 预约 -> 到访记录
+
+业务流程：
+1. 员工在小程序发起邀请(VisitorInvitation)，生成预约码
+2. 访客收到预约码，到访时扫码触发审批或直接核验
+3. 审批通过后生成预约(VisitorAppointment)
+4. 访客到场扫码 -> 到访记录(VisitRecord) check_in
+5. 访客离场 -> check_out，全流程闭环
+"""
+from sqlalchemy import Column, String, Integer, DateTime, ForeignKey
 
 from app.models.base import BaseModel
 
 
 class VisitorInvitation(BaseModel):
-    """访客邀请（员工发起）"""
+    """访客邀请（员工发起）
+
+    appointment_code 为唯一预约码，访客凭此码到访核验。
+    """
     __tablename__ = "biz_visitor_invitation"
 
     inviter_id = Column(Integer, ForeignKey("sys_user.id"), nullable=False, comment="邀请人ID")
