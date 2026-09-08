@@ -1,0 +1,11 @@
+[
+  {
+    "id": 1,
+    "role_name": "超级管理员",
+    "role_code": "admin",
+    "description": "拥有系统全部权限",
+    "status": 1,
+    "menu_ids": [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
+    "create_time": "2026-01-01 00:00:00"
+  }
+]

@@ -1,0 +1,29 @@
+[
+  {
+    "id": 1,
+    "spot_code": "A-001",
+    "area": "A区",
+    "floor": "-1楼",
+    "status": "occupied",
+    "vehicle_id": 1,
+    "create_time": "2026-01-01 00:00:00"
+  },
+  {
+    "id": 2,
+    "spot_code": "A-002",
+    "area": "A区",
+    "floor": "-1楼",
+    "status": "occupied",
+    "vehicle_id": 2,
+    "create_time": "2026-01-01 00:00:00"
+  },
+  {
+    "id": 3,
+    "spot_code": "A-003",
+    "area": "A区",
+    "floor": "-1楼",
+    "status": "free",
+    "vehicle_id": null,
+    "create_time": "2026-01-01 00:00:00"
+  }
+]

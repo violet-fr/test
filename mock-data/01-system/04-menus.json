@@ -1,0 +1,26 @@
+[
+  {
+    "id": 1,
+    "parent_id": 0,
+    "name": "系统管理",
+    "path": "/system",
+    "component": "Layout",
+    "icon": "setting",
+    "sort": 1,
+    "type": 1,
+    "permission": "",
+    "children": [
+      {
+        "id": 2,
+        "parent_id": 1,
+        "name": "用户管理",
+        "path": "/system/users",
+        "component": "system/users/index",
+        "icon": "user",
+        "sort": 1,
+        "type": 2,
+        "permission": "system:user:list"
+      }
+    ]
+  }
+]

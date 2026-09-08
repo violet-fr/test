@@ -1,0 +1,20 @@
+[
+  {
+    "id": 1,
+    "name": "A栋一楼大会议室",
+    "capacity": 50,
+    "floor": "1楼",
+    "location": "A栋",
+    "equipment": ["投影仪", "音响", "白板"],
+    "status": 1
+  },
+  {
+    "id": 2,
+    "name": "A栋二楼小会议室",
+    "capacity": 10,
+    "floor": "2楼",
+    "location": "A栋",
+    "equipment": ["投影仪", "白板"],
+    "status": 1
+  }
+]

@@ -1,0 +1,31 @@
+[
+  {
+    "id": 1,
+    "parent_id": 0,
+    "name": "智慧园区管委会",
+    "sort": 1,
+    "leader": "超级管理员",
+    "phone": "13800000001",
+    "status": 1,
+    "children": [
+      {
+        "id": 2,
+        "parent_id": 1,
+        "name": "综合管理部",
+        "sort": 1,
+        "leader": "张三",
+        "phone": "13800000002",
+        "status": 1
+      },
+      {
+        "id": 3,
+        "parent_id": 1,
+        "name": "安保部",
+        "sort": 2,
+        "leader": "李四",
+        "phone": "13800000003",
+        "status": 1
+      }
+    ]
+  }
+]

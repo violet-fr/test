@@ -1,0 +1,20 @@
+[
+  {
+    "id": 1,
+    "type": "repair",
+    "title": "A栋3楼会议室空调故障",
+    "description": "会议室空调不制冷，需要维修",
+    "location": "A栋3楼会议室",
+    "reporter_id": 2,
+    "reporter_name": "张三",
+    "image_urls": ["/uploads/2026/09/ticket_001.jpg"],
+    "status": "pending",
+    "assignee_id": null,
+    "create_time": "2026-09-08 09:00:00",
+    "assign_time": null,
+    "start_time": null,
+    "complete_time": null,
+    "evaluate_score": null,
+    "evaluate_comment": null
+  }
+]

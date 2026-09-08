@@ -1,0 +1,20 @@
+[
+  {
+    "id": 1,
+    "user_id": 2,
+    "name": "张三",
+    "dept_name": "综合管理部",
+    "face_image": "/uploads/2026/09/face_zhangsan.jpg",
+    "status": 1,
+    "create_time": "2026-01-10 11:00:00"
+  },
+  {
+    "id": 2,
+    "user_id": 3,
+    "name": "李四",
+    "dept_name": "安保部",
+    "face_image": "/uploads/2026/09/face_lisi.jpg",
+    "status": 1,
+    "create_time": "2026-02-01 09:30:00"
+  }
+]

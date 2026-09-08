@@ -1,0 +1,18 @@
+[
+  {
+    "id": 1,
+    "template_id": 1,
+    "template_name": "请假申请",
+    "title": "张三的请假申请",
+    "applicant_id": 2,
+    "applicant_name": "张三",
+    "status": "approved",
+    "form_data": {
+      "start_date": "2026-09-10",
+      "end_date": "2026-09-12",
+      "reason": "家中有事"
+    },
+    "create_time": "2026-09-08 10:00:00",
+    "approve_time": "2026-09-08 14:30:00"
+  }
+]

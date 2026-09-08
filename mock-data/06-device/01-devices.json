@@ -1,0 +1,54 @@
+[
+  {
+    "id": 1,
+    "device_code": "GATE_001",
+    "name": "东门闸机",
+    "type": "gate",
+    "location": "园区东门",
+    "status": "online",
+    "vendor": "海康威视",
+    "model": "DS-K3B501",
+    "driver": "mock",
+    "last_online": "2026-09-08 10:00:00",
+    "create_time": "2026-01-01 00:00:00"
+  },
+  {
+    "id": 2,
+    "device_code": "GATE_002",
+    "name": "南门闸机",
+    "type": "gate",
+    "location": "园区南门",
+    "status": "online",
+    "vendor": "海康威视",
+    "model": "DS-K3B501",
+    "driver": "mock",
+    "last_online": "2026-09-08 09:55:00",
+    "create_time": "2026-01-01 00:00:00"
+  },
+  {
+    "id": 3,
+    "device_code": "CAM_B3_01",
+    "name": "B栋3楼监控",
+    "type": "camera",
+    "location": "B栋3楼走廊",
+    "status": "online",
+    "vendor": "海康威视",
+    "model": "DS-2CD3T47WD-L",
+    "driver": "mock",
+    "last_online": "2026-09-08 10:00:00",
+    "create_time": "2026-01-01 00:00:00"
+  },
+  {
+    "id": 4,
+    "device_code": "BARRIER_01",
+    "name": "停车场入口道闸",
+    "type": "barrier",
+    "location": "停车场A区入口",
+    "status": "online",
+    "vendor": "捷顺",
+    "model": "JSDZ0206",
+    "driver": "mock",
+    "last_online": "2026-09-08 08:30:00",
+    "create_time": "2026-01-01 00:00:00"
+  }
+]

@@ -1,0 +1,38 @@
+[
+  {
+    "id": 1,
+    "username": "admin",
+    "nickname": "超级管理员",
+    "phone": "13800000001",
+    "email": "admin@smartpark.com",
+    "dept_id": 1,
+    "role_ids": [1],
+    "status": 1,
+    "avatar": "/uploads/avatars/admin.png",
+    "create_time": "2026-01-01 00:00:00"
+  },
+  {
+    "id": 2,
+    "username": "zhangsan",
+    "nickname": "张三",
+    "phone": "13800000002",
+    "email": "zhangsan@smartpark.com",
+    "dept_id": 2,
+    "role_ids": [2],
+    "status": 1,
+    "avatar": "/uploads/avatars/zhangsan.png",
+    "create_time": "2026-01-15 09:30:00"
+  },
+  {
+    "id": 3,
+    "username": "lisi",
+    "nickname": "李四",
+    "phone": "13800000003",
+    "email": "lisi@smartpark.com",
+    "dept_id": 3,
+    "role_ids": [3],
+    "status": 1,
+    "avatar": "/uploads/avatars/lisi.png",
+    "create_time": "2026-02-01 10:00:00"
+  }
+]

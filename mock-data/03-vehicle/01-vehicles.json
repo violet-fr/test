@@ -1,0 +1,41 @@
+[
+  {
+    "id": 1,
+    "plate_number": "京A12345",
+    "owner_name": "张三",
+    "owner_id": 2,
+    "vehicle_type": "小型汽车",
+    "color": "黑色",
+    "is_monthly": true,
+    "brand": "大众",
+    "model": "迈腾",
+    "status": 1,
+    "create_time": "2026-01-10 10:00:00"
+  },
+  {
+    "id": 2,
+    "plate_number": "京B67890",
+    "owner_name": "李四",
+    "owner_id": 3,
+    "vehicle_type": "SUV",
+    "color": "白色",
+    "is_monthly": true,
+    "brand": "丰田",
+    "model": "汉兰达",
+    "status": 1,
+    "create_time": "2026-02-15 14:30:00"
+  },
+  {
+    "id": 3,
+    "plate_number": "沪A202601",
+    "owner_name": "访客车辆",
+    "owner_id": 0,
+    "vehicle_type": "小型汽车",
+    "color": "灰色",
+    "is_monthly": false,
+    "brand": "宝马",
+    "model": "3系",
+    "status": 1,
+    "create_time": "2026-09-05 08:30:00"
+  }
+]

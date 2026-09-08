@@ -1,0 +1,18 @@
+[
+  {
+    "id": 1,
+    "inviter_id": 2,
+    "inviter_name": "张三",
+    "visitor_name": "王五",
+    "visitor_phone": "13900139000",
+    "visit_date": "2026-09-09",
+    "visit_purpose": "商务洽谈",
+    "visit_duration": 2,
+    "appointment_code": "VISITOR202609090001",
+    "status": "approved",
+    "check_in_time": null,
+    "check_out_time": null,
+    "create_time": "2026-09-08 10:00:00",
+    "approve_time": "2026-09-08 10:30:00"
+  }
+]

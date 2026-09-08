@@ -1,0 +1,12 @@
+{
+  "total_persons": 320,
+  "today_visitors": 15,
+  "active_alarms": 3,
+  "online_devices": 45,
+  "parking_usage": {
+    "total": 200,
+    "used": 132,
+    "free": 68
+  },
+  "today_vehicle_entries": 87
+}

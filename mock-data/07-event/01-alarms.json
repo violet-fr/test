@@ -1,0 +1,17 @@
+[
+  {
+    "id": 1,
+    "source": "ai_vision",
+    "type": "fire_smoke",
+    "level": "high",
+    "title": "检测到烟火",
+    "description": "在 B 栋 3 楼走廊检测到烟雾",
+    "image_url": "/uploads/2026/09/alarm_001.jpg",
+    "location": "B栋3楼",
+    "device_code": "CAM_B3_01",
+    "status": "pending",
+    "handler_id": null,
+    "create_time": "2026-09-08 10:15:00",
+    "acknowledge_time": null
+  }
+]

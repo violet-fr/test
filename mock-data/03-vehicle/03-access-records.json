@@ -1,0 +1,14 @@
+[
+  {
+    "id": 1,
+    "plate_number": "京A12345",
+    "vehicle_id": 1,
+    "spot_id": 1,
+    "plate_image": "/uploads/2026/09/plate_001.jpg",
+    "enter_time": "2026-09-08 08:30:00",
+    "exit_time": null,
+    "is_allowed": true,
+    "device_code": "GATE_PARK_01",
+    "recognized_by": "ai_vision"
+  }
+]
