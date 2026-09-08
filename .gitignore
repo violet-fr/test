@@ -1,0 +1,54 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+dist/
+build/
+.eggs/
+*.egg
+.venv/
+venv/
+env/
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Node
+node_modules/
+dist/
+.temp/
+.cache/
+
+# 前端
+web-admin/node_modules/
+web-admin/dist/
+web-screen/node_modules/
+web-screen/dist/
+miniapp/unpackage/
+miniapp/dist/
+
+# 部署
+deploy/.env
+deploy/volumes/
+*.log
+
+# 模型文件（大文件，不提交）
+ai-service/app/models/*.bin
+ai-service/app/models/*.gguf
+ai-service/app/models/*.onnx
+
+# 上传文件
+backend/static/uploads/*
+!backend/static/uploads/.gitkeep
+
+# 环境变量
+.env
+*.local
