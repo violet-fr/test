@@ -1,13 +1,16 @@
 version: "3.8"
 
+# 敏感配置通过环境变量注入，参考 deploy/.env.example
+# 复制一份为 deploy/.env 并填入实际值后启动：cp deploy/.env.example deploy/.env
+
 services:
   postgres:
     image: pgvector/pgvector:pg16
     container_name: park-postgres
     environment:
-      POSTGRES_USER: park
-      POSTGRES_PASSWORD: park123
-      POSTGRES_DB: smart_park
+      POSTGRES_USER: ${POSTGRES_USER:-park}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?POSTGRES_PASSWORD is required}
+      POSTGRES_DB: ${POSTGRES_DB:-smart_park}
     ports:
       - "5432:5432"
     volumes:
@@ -26,7 +29,12 @@ services:
   backend:
     build: ../backend
     container_name: park-backend
-    env_file: ../backend/.env.example
+    env_file:
+      - ../backend/.env
+    environment:
+      DATABASE_URL: postgresql+psycopg://${POSTGRES_USER:-park}:${POSTGRES_PASSWORD}@postgres:5432/${POSTGRES_DB:-smart_park}
+      REDIS_URL: redis://redis:6379/0
+      AI_SERVICE_URL: http://ai-service:8001
     ports:
       - "8000:8000"
     volumes:
@@ -40,6 +48,8 @@ services:
   ai-service:
     build: ../ai-service
     container_name: park-ai-service
+    environment:
+      VECTOR_DB_URL: postgresql+psycopg://${POSTGRES_USER:-park}:${POSTGRES_PASSWORD}@postgres:5432/${POSTGRES_DB:-smart_park}
     ports:
       - "8001:8001"
     volumes:

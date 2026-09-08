@@ -1,8 +1,14 @@
 """AI 服务配置"""
-from pydantic_settings import BaseSettings
+from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
 class Settings(BaseSettings):
+    model_config = SettingsConfigDict(
+        env_file=".env",
+        case_sensitive=True,
+        extra="ignore",
+    )
+
     PROJECT_NAME: str = "智慧园区 AI 服务"
     API_V1_PREFIX: str = "/api/v1"
 
@@ -16,8 +22,8 @@ class Settings(BaseSettings):
     # 向量模型
     EMBEDDING_MODEL: str = "bge-small-zh"
 
-    # 向量库（复用业务库 pgvector）
-    VECTOR_DB_URL: str = "postgresql+psycopg://park:park123@localhost:5432/smart_park"
+    # 向量库（复用业务库 pgvector）—— 必须通过环境变量提供，不硬编码密码
+    VECTOR_DB_URL: str
 
     # 人脸
     FACE_MODEL: str = "buffalo_l"
@@ -25,8 +31,6 @@ class Settings(BaseSettings):
 
     # 图像识别
     YOLO_MODEL: str = "yolov8n.pt"
-
-    model_config = {"env_file": ".env", "case_sensitive": True}
 
 
 settings = Settings()

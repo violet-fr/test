@@ -1,10 +1,12 @@
 import { defineStore } from 'pinia'
-import { login as apiLogin, getUserInfo, getMenuTree } from '@/api/auth'
+import { login as apiLogin, getUserInfo, getMenuTree, type MenuItem, type LoginResult } from '@/api/auth'
+
+type UserInfo = LoginResult['user']
 
 interface UserState {
   token: string
-  userInfo: any
-  menus: any[]
+  userInfo: UserInfo | null
+  menus: MenuItem[]
 }
 
 export const useUserStore = defineStore('user', {
@@ -15,7 +17,7 @@ export const useUserStore = defineStore('user', {
   }),
   actions: {
     async login(username: string, password: string) {
-      const res: any = await apiLogin({ username, password })
+      const res = await apiLogin({ username, password })
       this.token = res.access_token
       localStorage.setItem('access_token', res.access_token)
       localStorage.setItem('refresh_token', res.refresh_token)

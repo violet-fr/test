@@ -4,8 +4,6 @@ from sqlalchemy.orm import relationship
 
 from app.models.base import BaseModel
 
-user_role = None  # 延迟引用，见下方
-
 
 class User(BaseModel):
     __tablename__ = "sys_user"

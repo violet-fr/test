@@ -1,6 +1,6 @@
 """初始化基础数据：超级管理员、默认角色、菜单、部门"""
-import sys
 import os
+import sys
 
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 
@@ -10,7 +10,12 @@ from app.models.user import User
 from app.models.role import Role
 from app.models.menu import Menu
 from app.models.dept import Dept
-from app.models.role import sys_user_role, sys_role_menu
+
+# 管理员密码从环境变量读取，避免硬编码
+ADMIN_PASSWORD = os.getenv("ADMIN_PASSWORD")
+if not ADMIN_PASSWORD:
+    print("⚠️  警告：未设置 ADMIN_PASSWORD 环境变量，使用开发默认密码。生产环境务必设置！")
+    ADMIN_PASSWORD = "dev_admin_pass_change_me"
 
 
 def init():
@@ -63,7 +68,7 @@ def init():
         if not admin:
             admin = User(
                 username="admin",
-                password=hash_password("admin123"),
+                password=hash_password(ADMIN_PASSWORD),
                 nickname="超级管理员",
                 is_superuser=True,
                 status=1,
@@ -72,7 +77,7 @@ def init():
             db.add(admin)
 
         db.commit()
-        print("初始化数据完成：admin / admin123")
+        print("初始化数据完成：admin 账号已创建")
     finally:
         db.close()
 
