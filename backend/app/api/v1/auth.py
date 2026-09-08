@@ -6,9 +6,10 @@ from app.core.database import get_db
 from app.core.dependencies import get_current_user
 from app.core.exceptions import BizException
 from app.core.response import success
-from app.core.security import create_access_token, create_refresh_token, verify_password, decode_token
+from app.core.security import create_access_token, create_refresh_token, verify_password, decode_token, hash_password
 from app.models.user import User
-from app.schemas.auth import LoginRequest, RefreshRequest
+from app.models.role import Role
+from app.schemas.auth import LoginRequest, RefreshRequest, RegisterRequest
 
 router = APIRouter(prefix="/auth", tags=["认证授权"])
 
@@ -34,6 +35,50 @@ def login(req: LoginRequest, db: Session = Depends(get_db)):
             "username": user.username,
             "nickname": user.nickname,
             "avatar": user.avatar,
+            "roles": [r.code for r in user.roles],
+        },
+    })
+
+
+@router.post("/register")
+def register(req: RegisterRequest, db: Session = Depends(get_db)):
+    """用户注册（员工/访客角色）"""
+    # 用户名唯一性校验
+    if db.query(User).filter(User.username == req.username).first():
+        raise BizException(12002, "用户名已存在")
+
+    # 角色白名单：仅允许注册 employee / visitor，admin 由后台分配
+    if req.role_code not in ("employee", "visitor"):
+        raise BizException(10001, "非法的注册角色")
+
+    role = db.query(Role).filter(Role.code == req.role_code).first()
+    if not role:
+        raise BizException(12002, f"角色 {req.role_code} 不存在")
+
+    user = User(
+        username=req.username,
+        password=hash_password(req.password),
+        nickname=req.nickname or req.username,
+        phone=req.phone,
+        email=req.email,
+        status=1,
+        roles=[role],
+    )
+    db.add(user)
+    db.commit()
+    db.refresh(user)
+
+    access_token = create_access_token(str(user.id))
+    refresh_token = create_refresh_token(str(user.id))
+
+    return success({
+        "access_token": access_token,
+        "refresh_token": refresh_token,
+        "token_type": "bearer",
+        "user": {
+            "id": user.id,
+            "username": user.username,
+            "nickname": user.nickname,
             "roles": [r.code for r in user.roles],
         },
     })

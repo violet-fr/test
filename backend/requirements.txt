@@ -6,6 +6,7 @@ uvicorn[standard]==0.30.6
 SQLAlchemy==2.0.35
 psycopg[binary]==3.2.1
 alembic==1.13.2
+pgvector==0.3.5
 
 # 配置
 pydantic==2.9.2

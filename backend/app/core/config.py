@@ -1,5 +1,5 @@
 """应用配置"""
-from typing import List, Optional
+from typing import List
 
 from pydantic import field_validator
 from pydantic_settings import BaseSettings, SettingsConfigDict
