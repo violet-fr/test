@@ -1,0 +1,18 @@
+# Web 框架
+fastapi==0.115.0
+uvicorn[standard]==0.30.6
+
+# 配置
+pydantic==2.9.2
+pydantic-settings==2.5.2
+
+# AI 依赖（按需安装，避免镜像过大）
+# ollama
+# langchain
+# langchain-community
+# insightface
+# onnxruntime
+# ultralytics
+# numpy
+# sentence-transformers
+# psycopg[binary]

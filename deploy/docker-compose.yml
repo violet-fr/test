@@ -1,0 +1,67 @@
+version: "3.8"
+
+services:
+  postgres:
+    image: pgvector/pgvector:pg16
+    container_name: park-postgres
+    environment:
+      POSTGRES_USER: park
+      POSTGRES_PASSWORD: park123
+      POSTGRES_DB: smart_park
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    restart: unless-stopped
+
+  redis:
+    image: redis:7-alpine
+    container_name: park-redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - redisdata:/data
+    restart: unless-stopped
+
+  backend:
+    build: ../backend
+    container_name: park-backend
+    env_file: ../backend/.env.example
+    ports:
+      - "8000:8000"
+    volumes:
+      - ../backend:/app
+      - uploads:/app/static/uploads
+    depends_on:
+      - postgres
+      - redis
+    restart: unless-stopped
+
+  ai-service:
+    build: ../ai-service
+    container_name: park-ai-service
+    ports:
+      - "8001:8001"
+    volumes:
+      - ../ai-service:/app
+    restart: unless-stopped
+
+  nginx:
+    image: nginx:alpine
+    container_name: park-nginx
+    ports:
+      - "80:80"
+    volumes:
+      - ./nginx.conf:/etc/nginx/conf.d/default.conf
+      - uploads:/var/www/uploads:ro
+      - ../web-admin/dist:/var/www/admin:ro
+      - ../web-screen/dist:/var/www/screen:ro
+    depends_on:
+      - backend
+      - ai-service
+    restart: unless-stopped
+
+volumes:
+  pgdata:
+  redisdata:
+  uploads:

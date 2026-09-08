@@ -1,0 +1,19 @@
+# Web 框架
+fastapi==0.115.0
+uvicorn[standard]==0.30.6
+
+# 数据库
+SQLAlchemy==2.0.35
+psycopg[binary]==3.2.1
+alembic==1.13.2
+
+# 配置
+pydantic==2.9.2
+pydantic-settings==2.5.2
+
+# 安全
+bcrypt==4.2.0
+PyJWT==2.9.0
+
+# 工具
+python-multipart==0.0.12
