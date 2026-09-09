@@ -16,8 +16,20 @@ depends_on = None
 
 
 def upgrade() -> None:
-    # 启用 pgvector 扩展
-    op.execute("CREATE EXTENSION IF NOT EXISTS vector")
+    # 检测服务端是否可用 pgvector 扩展(Docker 的 pgvector 镜像自带;Windows EDB 安装包不带)
+    # P3 办公协同(公告/审批/会议室)不依赖向量,缺失时人脸列降级为文本,不影响 OA 模块
+    bind = op.get_bind()
+    has_vector = (
+        bind.execute(
+            sa.text("SELECT 1 FROM pg_available_extensions WHERE name = 'vector'")
+        ).fetchone()
+        is not None
+    )
+    if has_vector:
+        op.execute("CREATE EXTENSION IF NOT EXISTS vector")
+
+    # 人脸特征列类型:服务端有 pgvector 用 Vector(512),否则降级为 Text
+    face_feature_type = Vector(512) if (has_vector and Vector is not None) else sa.Text()
 
     # ===== 系统域 =====
     op.create_table(

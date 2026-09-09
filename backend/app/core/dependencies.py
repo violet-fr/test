@@ -11,7 +11,8 @@
 """
 from typing import List
 
-from fastapi import Depends, Header
+from fastapi import Depends
+from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
 from sqlalchemy.orm import Session
 
 from app.core.database import get_db
@@ -19,9 +20,17 @@ from app.core.exceptions import BizException
 from app.core.security import decode_token
 from app.models.user import User
 
+# Swagger 全局鉴权方案：页面右上角会出现 "Authorize" 按钮，
+# 填入登录后的 access_token（只填 token，无需 Bearer 前缀），所有接口自动携带。
+# auto_error=False：不自动抛 403，交由下方统一抛业务异常，保持响应格式一致。
+bearer_scheme = HTTPBearer(
+    auto_error=False,
+    description="粘贴登录接口返回的 access_token（只需 token 本身，不要加 Bearer 前缀）",
+)
+
 
 def get_current_user(
-    authorization: str = Header(None),
+    credentials: HTTPAuthorizationCredentials = Depends(bearer_scheme),
     db: Session = Depends(get_db),
 ) -> User:
     """获取当前登录用户
@@ -37,10 +46,10 @@ def get_current_user(
     Raises:
         BizException: Token 缺失/无效/用户被禁用时抛出
     """
-    if not authorization or not authorization.startswith("Bearer "):
+    if credentials is None:
         raise BizException(10002, "未授权，请先登录")
 
-    token = authorization.replace("Bearer ", "")
+    token = credentials.credentials
     try:
         payload = decode_token(token)
     except Exception:

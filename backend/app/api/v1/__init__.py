@@ -12,8 +12,11 @@ router.include_router(auth.router)
 # 系统管理
 router.include_router(system_router)
 
+# 办公协同（P3：通知公告 / 会议室预约 / 审批流程）—— 代码位于 app/modules/oa
+from app.modules.oa import router as oa_router  # noqa: E402
+router.include_router(oa_router)
+
 # 以下模块由对应小组开发后挂载：
-# from app.api.v1.oa import router as oa_router; router.include_router(oa_router)
 # from app.api.v1.vehicle import router as vehicle_router; router.include_router(vehicle_router)
 # from app.api.v1.access import router as access_router; router.include_router(access_router)
 # from app.api.v1.visitor import router as visitor_router; router.include_router(visitor_router)

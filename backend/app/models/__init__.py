@@ -17,3 +17,11 @@ from app.models.visitor import VisitorInvitation, VisitorAppointment, VisitRecor
 
 # 办公域
 from app.models.notice import Notice  # noqa
+from app.models.notice_read import NoticeRead  # noqa
+from app.models.approval import (
+    ApprovalTemplate,
+    ApprovalInstance,
+    ApprovalRecord,
+    ApprovalTask,
+)  # noqa
+from app.models.meeting import MeetingRoom, Booking  # noqa
