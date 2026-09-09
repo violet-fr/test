@@ -1,9 +1,18 @@
 version: "3.8"
 
-# 敏感配置通过环境变量注入，参考 deploy/.env.example
-# 复制一份为 deploy/.env 并填入实际值后启动：cp deploy/.env.example deploy/.env
+# 智慧园区综合管理平台 —— 生产环境编排
+#
+# 启动步骤：
+#   1. cp .env.example .env 并填入强密码
+#   2. docker compose up -d
+#   3. docker compose exec backend alembic upgrade head   # 建表
+#   4. docker compose exec backend python /app/init_data.py  # 初始化数据
+#
+# 敏感配置（POSTGRES_PASSWORD / REDIS_PASSWORD / SECRET_KEY）一律通过 .env 注入，不写入本文件。
 
 services:
+  # ===== PostgreSQL 16 + pgvector 向量扩展 =====
+  # 使用 pgvector 官方镜像，已内置 vector 扩展文件
   postgres:
     image: pgvector/pgvector:pg16
     container_name: park-postgres
@@ -11,51 +20,104 @@ services:
       POSTGRES_USER: ${POSTGRES_USER:-park}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?POSTGRES_PASSWORD is required}
       POSTGRES_DB: ${POSTGRES_DB:-smart_park}
+      # 时区设置，保证 now() 等函数返回北京时间
+      TZ: Asia/Shanghai
     ports:
       - "5432:5432"
     volumes:
       - pgdata:/var/lib/postgresql/data
+      # 首次启动自动执行：启用 pgvector 扩展
+      - ./postgres-init:/docker-entrypoint-initdb.d:ro
+    healthcheck:
+      # pg_isready 检查数据库是否可接受连接
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-park} -d ${POSTGRES_DB:-smart_park}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 20s
     restart: unless-stopped
 
+  # ===== Redis 7 缓存（验证码 / 限流 / Token 黑名单 / 热点数据） =====
   redis:
     image: redis:7-alpine
     container_name: park-redis
+    # requirepass：启用密码认证，防止未授权访问
+    # appendonly yes：开启 AOF 持久化，重启后缓存数据不丢失
+    # maxmemory + allkeys-lru：内存上限与淘汰策略，避免缓存无限增长
+    command: >
+      redis-server
+      --requirepass ${REDIS_PASSWORD:?REDIS_PASSWORD is required}
+      --appendonly yes
+      --appendfsync everysec
+      --maxmemory 256mb
+      --maxmemory-policy allkeys-lru
     ports:
       - "6379:6379"
     volumes:
       - redisdata:/data
+    healthcheck:
+      # 带密码 ping，返回 PONG 表示健康
+      test: ["CMD", "redis-cli", "-a", "${REDIS_PASSWORD}", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 5s
     restart: unless-stopped
 
+  # ===== 业务后端（FastAPI，端口 8000） =====
   backend:
     build: ../backend
     container_name: park-backend
     env_file:
       - ../backend/.env
     environment:
+      # 容器内通过服务名访问，覆盖 .env 中的 localhost 地址
       DATABASE_URL: postgresql+psycopg://${POSTGRES_USER:-park}:${POSTGRES_PASSWORD}@postgres:5432/${POSTGRES_DB:-smart_park}
-      REDIS_URL: redis://redis:6379/0
+      REDIS_URL: redis://:${REDIS_PASSWORD}@redis:6379/0
       AI_SERVICE_URL: http://ai-service:8001
+      TZ: Asia/Shanghai
     ports:
       - "8000:8000"
     volumes:
       - ../backend:/app
       - uploads:/app/static/uploads
     depends_on:
-      - postgres
-      - redis
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    healthcheck:
+      # 后端健康检查同时探测数据库与 Redis 状态
+      test: ["CMD-SHELL", "python -c \"import urllib.request; urllib.request.urlopen('http://localhost:8000/health')\""]
+      interval: 15s
+      timeout: 10s
+      retries: 5
+      start_period: 30s
     restart: unless-stopped
 
+  # ===== AI 服务（FastAPI，端口 8001，独立进程隔离重依赖） =====
   ai-service:
     build: ../ai-service
     container_name: park-ai-service
     environment:
       VECTOR_DB_URL: postgresql+psycopg://${POSTGRES_USER:-park}:${POSTGRES_PASSWORD}@postgres:5432/${POSTGRES_DB:-smart_park}
+      TZ: Asia/Shanghai
     ports:
       - "8001:8001"
     volumes:
       - ../ai-service:/app
+    depends_on:
+      postgres:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD-SHELL", "python -c \"import urllib.request; urllib.request.urlopen('http://localhost:8001/health')\""]
+      interval: 15s
+      timeout: 10s
+      retries: 5
+      start_period: 30s
     restart: unless-stopped
 
+  # ===== Nginx 反向代理 + 静态资源 =====
   nginx:
     image: nginx:alpine
     container_name: park-nginx
@@ -67,11 +129,13 @@ services:
       - ../web-admin/dist:/var/www/admin:ro
       - ../web-screen/dist:/var/www/screen:ro
     depends_on:
-      - backend
-      - ai-service
+      backend:
+        condition: service_healthy
+      ai-service:
+        condition: service_healthy
     restart: unless-stopped
 
 volumes:
-  pgdata:
-  redisdata:
-  uploads:
+  pgdata:      # PostgreSQL 数据持久化
+  redisdata:   # Redis AOF 持久化
+  uploads:     # 用户上传文件
